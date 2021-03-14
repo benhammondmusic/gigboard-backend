@@ -6,7 +6,7 @@ const cors = require('cors');
 const { user } = require('./Controllers');
 
 /* Port */
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 
 /* App */
 const app = express();
