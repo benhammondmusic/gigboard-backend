@@ -1,12 +1,12 @@
 /* External Modules */
-const express = require("express");
-const cors = require("cors");
+const express = require('express');
+const cors = require('cors');
 
 /* Internal Modules */
-const { user } = require("./Controllers");
+const { user } = require('./Controllers');
 
 /* Port */
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 /* App */
 const app = express();
@@ -18,11 +18,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 /* Routes */
-app.get("/", (req, res) => {
-  res.send("Hello World");
+app.get('/', (req, res) => {
+  res.send('Hello World');
 });
 
-app.get("/helloworld", (req, res) => {
+app.get('/helloworld', (req, res) => {
   try {
     res.status(200).json({
       status: 200,
@@ -38,7 +38,7 @@ app.get("/helloworld", (req, res) => {
   }
 });
 
-app.post("/register", user.register);
+app.post('/register', user.register);
 
 // app listening
 app.listen(PORT, () => console.log(`listening at port ${PORT} \nhttp://localhost:${PORT}`));
