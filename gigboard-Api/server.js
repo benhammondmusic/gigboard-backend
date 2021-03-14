@@ -2,6 +2,9 @@
 const express = require("express");
 const cors = require("cors");
 
+/* Internal Modules */
+const { user } = require("./Controllers");
+
 /* Port */
 const PORT = 3001;
 
@@ -34,6 +37,8 @@ app.get("/helloworld", (req, res) => {
     });
   }
 });
+
+app.post("/register", user.register);
 
 // app listening
 app.listen(PORT, () => console.log(`listening at port ${PORT} \nhttp://localhost:${PORT}`));
