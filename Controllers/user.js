@@ -1,5 +1,5 @@
-const { User } = require("../Models");
-const bcrypt = require("bcrypt");
+const { User } = require('../Models');
+const bcrypt = require('bcrypt');
 
 /* NOTE Register functionality */
 const register = async (req, res) => {
@@ -17,7 +17,7 @@ const register = async (req, res) => {
     if (user)
       return res.status(400).json({
         status: 400,
-        message: "Something went wrong. Please try again.",
+        message: 'Something went wrong. Please try again.',
       });
 
     if (password !== password2)
@@ -45,14 +45,14 @@ const register = async (req, res) => {
 
     return res.status(201).json({
       status: 201,
-      message: "User created succesfully",
+      message: 'User created succesfully',
       requestedAt: new Date().toLocaleDateString(),
     });
   } catch (error) {
     console.log(error);
     return res.status(400).json({
       status: 400,
-      message: "Something went wrong! Please try again",
+      message: 'Something went wrong! Please try again',
     });
   }
 };
@@ -63,13 +63,13 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     /* This will check the user inputs both the email and password fields. If one is not filled then it will throw an error */
-    if (email === "" || password === "") throw "missingInformation";
+    if (email === '' || password === '') throw 'missingInformation';
 
     /* Checking our database for the email entered on login page */
     const foundUser = await User.findOne({ email });
 
     /* Throws error if couldn't find a user */
-    if (!foundUser) throw "invalidUser";
+    if (!foundUser) throw 'invalidUser';
 
     /* Saving into a variable if the password entered is equal to the password of that user */
     const match = await bcrypt.compare(password, foundUser.password);
@@ -82,17 +82,17 @@ const login = async (req, res) => {
       // For now I'm only going to send some json data until we have the JWT set up
       res.status(200).json({
         status: 200,
-        message: "Success",
+        message: 'Success',
       });
     }
   } catch (error) {
-    if (error === "missingInformation") {
+    if (error === 'missingInformation') {
       return res.status(400).json({
         status: 400,
-        message: "Email and password cannot be empty",
+        message: 'Email and password cannot be empty',
       });
     }
-    if (error === "invalidUser") {
+    if (error === 'invalidUser') {
       return res.status(400).json({
         status: 400,
         message: "User doesn't exist",
@@ -101,7 +101,7 @@ const login = async (req, res) => {
 
     return res.status(500).json({
       status: 500,
-      message: "Something went wrong. Please try again",
+      message: 'Something went wrong. Please try again',
     });
   }
 };
