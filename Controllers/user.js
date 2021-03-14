@@ -1,4 +1,4 @@
-const { User } = require('../Models/Index.js');
+const { User } = require('../Models');
 const bcrypt = require('bcrypt');
 
 /* NOTE Register functionality */
