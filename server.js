@@ -1,9 +1,9 @@
 /* External Modules */
-const express = require("express");
-const cors = require("cors");
+const express = require('express');
+const cors = require('cors');
 
 /* Internal Modules */
-const { user } = require("./Controllers");
+const { user } = require('./Controllers');
 
 /* Port */
 const PORT = process.env.PORT || 5000;
@@ -15,20 +15,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const whitelist = [
-  "http://localhost:3000",
-  "https://jc-gig-frontend.herokuapp.com/",
-  "https://sergio-gig-board.herokuapp.com",
-  "https://hayden-gigboard.herokuapp.com/",
-  "https://gig-board1.herokuapp.com/",
-];
+// need to RF localhost to only work in development (using .env)
+const whitelist = ['http://localhost:3000', 'https://jc-gig-frontend.herokuapp.com/', 'https://sergio-gig-board.herokuapp.com', 'https://hayden-gigboard.herokuapp.com/', 'https://gig-board1.herokuapp.com/', 'https://gig-board.herokuapp.com/'];
 var corsOptions = {
   optionsSuccessStatus: 200,
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error('Not allowed by CORS'));
     }
   },
 };
@@ -36,11 +31,11 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 /* Routes */
-app.get("/", (req, res) => {
-  res.send("Hello World");
+app.get('/', (req, res) => {
+  res.send('Hello World');
 });
 
-app.get("/helloworld", (req, res) => {
+app.get('/helloworld', (req, res) => {
   try {
     res.status(200).json({
       status: 200,
@@ -56,7 +51,7 @@ app.get("/helloworld", (req, res) => {
   }
 });
 
-app.post("/register", user.register);
+app.post('/register', user.register);
 
 // app listening
 app.listen(PORT, () => console.log(`listening at port ${PORT} \nhttp://localhost:${PORT}`));
