@@ -21,6 +21,7 @@ const whitelist = [
   "https://sergio-gig-board.herokuapp.com",
   "https://hayden-gigboard.herokuapp.com/",
   "https://gig-board1.herokuapp.com/",
+  "https://kaye-gigboard.herokuapp.com",
 ];
 var corsOptions = {
   optionsSuccessStatus: 200,
