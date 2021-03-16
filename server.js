@@ -15,6 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// REMOVED WHITELIST - ALLOW ALL FOR NOW
 app.use(cors());
 
 /* Routes */
