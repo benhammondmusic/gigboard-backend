@@ -15,7 +15,19 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
+const whitelist = ['http://localhost:3000', 'https://jc-gig-frontend.herokuapp.com/'];
+var corsOptions = {
+optionsSuccessStatus: 200,
+origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+    callback(null, true);
+    } else {
+    callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 
 /* Routes */
 app.get('/', (req, res) => {
