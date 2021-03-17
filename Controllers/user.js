@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 /* NOTE Register functionality */
 const register = async (req, res) => {
   try {
-    /* password2 is the second item on the form to check their passwords match when registering */
+    
     const { email, username } = req.body;
 
     /* We want to isolate the actual password because we are going to salt and hash it */
