@@ -1,23 +1,27 @@
-//starter code from the reddit clone. still not sure how to do jwt auth so not sure if it all apllies
+const jwt = require("jsonwebtoken");
 
-// const jwt = require("jsonwebtoken");
-// const createToken = (user) => {
-//   //backend team decide token data
-//   const payload = {
-//     userName: user.username,
-//     email: user.email,
-//     id: user._id,
-//   };
-//   const token = jwt.sign(payload, "SEI-REDDIT-CLONE");
-//   return token;
-// };
+const createToken = (user) => {
 
-// const decodeUser = (token) => {
-//   var decoded = jwt.verify(token, "SEI-REDDIT-CLONE");
-//   return decoded;
-// };
+  const payload = {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    userName: user.username,
+    email: user.email,
+    id: user._id,
+    //groups: ['seeker', 'poster'] -to differentiate in future
+  };
 
-// module.exports = {
-//   createToken,
-//   decodeUser,
-// }
+  const token = jwt.sign(payload, "JWT_Secret");
+
+  return token;
+};
+
+const decodeUser = (token) => {
+  var decoded = jwt.verify(token, "JWT_Secret");
+  return decoded;
+};
+
+module.exports = {
+  createToken,
+  decodeUser,
+}
