@@ -1,8 +1,9 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
+console.log('database.js')
 // CONNECT TO REMOTE MONGODB ATLAS
-mongoose.connect(process.env.DATABASE_URL, {
+mongoose.connect('mongodb://127.0.0.1:27017/gigboard', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
