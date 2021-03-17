@@ -1,23 +1,27 @@
 const User = require('../User');
+const mongoose = require('mongoose');
 
 const newUser = async (body) => {
-    try {
-      return await User.create(body)
-    } catch (error) {
-      return error
-    }
-}
+  try {
+    console.log(body, 'body inside queries.newUser');
+
+    return await User.create(body);
+  } catch (error) {
+    return error;
+  }
+};
 
 const userExists = async (email) => {
-    const foundUser = await User.find({ email });
-    if (foundUser){
-      return true
-    } else {
-      return false
-    }
+  try {
+    const foundUser = await User.find({ email: email });
+    console.log(foundUser, 'foundUser inside userExists querie');
+    return foundUser.length !== 0;
+  } catch (error) {
+    console.log(error, 'inside UserExists');
   }
+};
 
 module.exports = {
-    newUser,
-    userExists
+  newUser,
+  userExists,
 };

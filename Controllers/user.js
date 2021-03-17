@@ -1,22 +1,22 @@
-const {newUser, userExists} = require('../Models/Users/queries');
+const { newUser, userExists } = require('../Models/Users/queries');
 const { User } = require('../Models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 /* NOTE Register functionality */
 const register = async (req, res) => {
   try {
-    
     const { email, username } = req.body;
 
     /* We want to isolate the actual password because we are going to salt and hash it */
     let { password } = req.body;
     /* We could change the display message if there's a user already exists. Let me know what we could do. */
+    console.log(email, 'email just before userExists()');
     if (userExists(email))
       return res.status(400).json({
         status: 400,
         message: 'User already exists',
-        
       });
 
     const salt = await bcrypt.genSaltSync(10);
@@ -30,7 +30,6 @@ const register = async (req, res) => {
       password,
     };
 
-    console.log(newUserPayload)
     await newUser(newUserPayload);
 
     return res.status(201).json({
@@ -71,23 +70,23 @@ const login = async (req, res) => {
     if (match) {
       // For now I'm only going to send some json data until we have the JWT set up
       const signedJwt = jwt.sign(
-        { /* payload */
-          _id: foundUser._id,
+        {
+          /* payload */ _id: foundUser._id,
           firstName: foundUser.firstName,
           lastName: foundUser.lastName,
           email: foundUser.email,
-          username: foundUser.username
+          username: foundUser.username,
         },
         process.env.SUPER_SECRET_KEY,
         {
-          expiresIn: '24h' 
+          expiresIn: '24h',
         }
       );
-        console.log(jwt)
+      console.log(jwt);
       res.status(200).json({
         status: 200,
         message: 'Success',
-        signedJwt
+        signedJwt,
       });
     }
   } catch (error) {
