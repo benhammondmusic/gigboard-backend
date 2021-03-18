@@ -1,32 +1,96 @@
+const { Post } = require('../Models');
 
-const { User, Post } = require('../Models');
+const createGig = async (req, res) => {
+  try {
+    const foundGig = await Post.findOne(req.body);
 
+    if (foundGig) throw 'gig is already created!';
 
-const createGig = async ( req, res ) => {
+    const gig = await Post.create(req.body);
 
-    try {
-        const foundGig = await Post.findOne(req.body)
+    res.status(201).json({
+      status: 201,
+      gig,
+      requestAt: new Date().toLocaleString(),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+const showGigs = async (req, res) => {
+  try {
+    console.log('show all gigs');
+    // // im using gigId to find the gig
+    // const gig = await Post.findById( req.params.gigId );
 
-        if ( foundGig ) throw 'gig is already created!'
+    // return res.status(200).json({
+    //     status: 200,
+    //     gig,
+    //     requestedAt: new Date().toLocaleString(),
+    //   });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-        const gig = await Post.create(req.body)
+const showGig = async (req, res) => {
+  try {
+    // im using gigId to find the gig
+    const gig = await Post.findById(req.params.gigId);
 
-        res.status(201).json({
-            status: 201,
-            gig,
-            requestAt: new Date().toLocaleString()
-          });
-    
-    } catch (error) {
-    
-        console.log(error)
-    
-    }
-}
+    return res.status(200).json({
+      status: 200,
+      gig,
+      requestedAt: new Date().toLocaleString(),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
+const updateGig = async (req, res) => {
+  try {
+    // im using gigId to find the gig
+    const updatedGig = await Post.findByIdAndUpdate(
+      req.params.gigId,
+      {
+        $set: {
+          ...req.body,
+        },
+      },
+      {
+        new: true,
+      }
+    );
 
+    return res.status(200).json({
+      status: 200,
+      updatedGig,
+      requestedAt: new Date().toLocaleString(),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
+const deleteGig = async (req, res) => {
+  try {
+    // im using gigId to find the gig
+    const deletedGig = await Post.findByIdAndDelete(req.params.gigId);
+
+    return res.status(200).json({
+      status: 200,
+      deletedGig,
+      requestedAt: new Date().toLocaleString(),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
-    createGig,
-}
+  createGig,
+  showGig,
+  updateGig,
+  destroy,
+};
