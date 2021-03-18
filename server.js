@@ -47,8 +47,6 @@ app.get('/helloworld', (req, res) => {
   }
 });
 
-app.post('/register', user.register);
-app.post('/login', user.login);
 
 // app listening
 app.listen(PORT, () => console.log(`listening at port ${PORT} \nhttp://localhost:${PORT}`));
