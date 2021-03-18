@@ -1,9 +1,13 @@
+const dotenv = require('dotenv');
+dotenv.config()
+
 /* External Modules */
 const express = require('express');
 const cors = require('cors');
 
 /* Internal Modules */
 const { user } = require('./Controllers');
+require('./config/database')
 
 /* Port */
 const PORT = process.env.PORT || 5000;
@@ -20,6 +24,10 @@ app.use(cors());
 
 /* Routes */
 app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
+app.get('/login', (req, res) => {
   res.send('Hello World');
 });
 
@@ -40,6 +48,7 @@ app.get('/helloworld', (req, res) => {
 });
 
 app.post('/register', user.register);
+app.post('/login', user.login);
 
 // app listening
 app.listen(PORT, () => console.log(`listening at port ${PORT} \nhttp://localhost:${PORT}`));

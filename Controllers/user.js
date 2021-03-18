@@ -1,47 +1,49 @@
+const { newUser } = require('../Models/Users/queries');
 const { User } = require('../Models');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 /* NOTE Register functionality */
 const register = async (req, res) => {
   try {
-    /* password2 is the second item on the form to check their passwords match when registering */
-    const { firstName, lastName, email, username, password2 } = req.body;
+    const { email, username } = req.body;
 
     /* We want to isolate the actual password because we are going to salt and hash it */
     let { password } = req.body;
+    
+    console.log(email, 'email just before userExists()');
 
-    /* checking to see if the user already exists via email */
-    const user = await User.findOne({ email });
+    /* NOTE in case we want to revise this function in the future */
+    // if (userExists(email)) {
+    //   return res.status(400).json({
+    //     status: 400,
+    //     message: 'User already exists',
+    //   });
+    // }
 
-    /* We could change the display message if there's a user already exists. Let me know what we could do. */
-    if (user)
+    /* I decided to move what was on queries over here to see what impact it would have */
+    const foundUser = await User.findOne({ email })
+
+    if (foundUser) {
       return res.status(400).json({
-        status: 400,
-        message: 'Something went wrong. Please try again.',
-      });
-
-    if (password !== password2)
-      return res.status(400).json({
-        status: 400,
-        // we put the data here as req.body so the forms won't clear after the error message pops up
-        data: req.body,
-        message: "Passwords don't match, please try again",
-      });
+          status: 400,
+          message: "Something went wrong! Please try again"
+      })
+    }
 
     const salt = await bcrypt.genSaltSync(10);
     const hash = await bcrypt.hashSync(password, salt);
 
     password = hash;
 
-    const newUser = {
-      firstName,
-      lastName,
+    const newUserPayload = {
       username,
       email,
       password,
     };
 
-    await User.create(newUser);
+    await newUser(newUserPayload);
 
     return res.status(201).json({
       status: 201,
@@ -52,7 +54,7 @@ const register = async (req, res) => {
     console.log(error);
     return res.status(400).json({
       status: 400,
-      message: 'Something went wrong! Please try again',
+      message: 'Something went wrong! Please try again ya fool',
     });
   }
 };
@@ -80,9 +82,24 @@ const login = async (req, res) => {
 
     if (match) {
       // For now I'm only going to send some json data until we have the JWT set up
+      const signedJwt = jwt.sign(
+        {
+          /* payload */ _id: foundUser._id,
+          firstName: foundUser.firstName,
+          lastName: foundUser.lastName,
+          email: foundUser.email,
+          username: foundUser.username,
+        },
+        process.env.SUPER_SECRET_KEY,
+        {
+          expiresIn: '24h',
+        }
+      );
+      console.log(jwt);
       res.status(200).json({
         status: 200,
         message: 'Success',
+        signedJwt,
       });
     }
   } catch (error) {
