@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 /* NOTE Register functionality */
 const register = async (req, res) => {
   try {
-    const { email, username } = req.body;
+    const { email } = req.body;
 
     /* We want to isolate the actual password because we are going to salt and hash it */
     let { password } = req.body;
@@ -81,7 +81,6 @@ const login = async (req, res) => {
           /* payload */ 
           _id: foundUser._id,
           email: foundUser.email,
-          username: foundUser.username,
         },
         process.env.SUPER_SECRET_KEY,
         {
