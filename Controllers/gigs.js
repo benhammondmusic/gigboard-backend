@@ -91,6 +91,7 @@ const deleteGig = async (req, res) => {
 module.exports = {
   createGig,
   showGig,
+  showGigs,
   updateGig,
   deleteGig,
 };
