@@ -2,6 +2,8 @@ const { Post } = require('../Models');
 
 const createGig = async (req, res) => {
   try {
+    console.log(req.body, 'REQ.BODY in CREATEGIG()');
+
     const foundGig = await Post.findOne(req.body);
 
     if (foundGig) throw 'gig is already created!';
@@ -14,22 +16,22 @@ const createGig = async (req, res) => {
       requestAt: new Date().toLocaleString(),
     });
   } catch (error) {
-    console.log(error);
+    console.log(error, 'ERROR IN CREATEGIG()');
   }
 };
 const showGigs = async (req, res) => {
   try {
     console.log('show all gigs');
-    // // im using gigId to find the gig
-    // const gig = await Post.findById( req.params.gigId );
+    // im using gigId to find the gig
+    const foundGigs = await Post.find({});
 
-    // return res.status(200).json({
-    //     status: 200,
-    //     gig,
-    //     requestedAt: new Date().toLocaleString(),
-    //   });
+    return res.status(200).json({
+      status: 200,
+      foundGigs,
+      requestedAt: new Date().toLocaleString(),
+    });
   } catch (error) {
-    console.log(error);
+    console.log(error, 'ERROR IN SHOWGIGS()');
   }
 };
 
