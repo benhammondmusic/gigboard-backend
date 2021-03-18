@@ -1,5 +1,5 @@
 const dotenv = require('dotenv');
-dotenv.config()
+dotenv.config();
 
 /* External Modules */
 const express = require('express');
@@ -7,7 +7,8 @@ const cors = require('cors');
 
 /* Internal Modules */
 const { user } = require('./Controllers');
-require('./config/database')
+require('./config/database');
+const { routes } = require('./routes');
 
 /* Port */
 const PORT = process.env.PORT || 5000;
@@ -24,31 +25,24 @@ app.use(cors());
 
 /* Routes */
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.send('Gigboard Backend API');
 });
 
-app.get('/login', (req, res) => {
-  res.send('Hello World');
-});
-
-app.get('/helloworld', (req, res) => {
-  try {
-    res.status(200).json({
-      status: 200,
-      text: `Hello World`,
-      requestedAt: new Date().toLocaleDateString(),
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 500,
-      error,
-      requestedAt: new Date().toLocaleDateString(),
-    });
-  }
-});
-
-app.post('/register', user.register);
-app.post('/login', user.login);
+// app.get('/helloworld', (req, res) => {
+//   try {
+//     res.status(200).json({
+//       status: 200,
+//       text: `Hello World`,
+//       requestedAt: new Date().toLocaleDateString(),
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       status: 500,
+//       error,
+//       requestedAt: new Date().toLocaleDateString(),
+//     });
+//   }
+// });
 
 // app listening
-app.listen(PORT, () => console.log(`listening at port ${PORT} \nhttp://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`listening at port ${PORT}\n`));
