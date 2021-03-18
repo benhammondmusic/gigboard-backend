@@ -8,7 +8,7 @@ const cors = require('cors');
 /* Internal Modules */
 const { user } = require('./Controllers');
 require('./config/database');
-const { routes } = require('./routes');
+const routes = require('./routes');
 
 /* Port */
 const PORT = process.env.PORT || 5000;
