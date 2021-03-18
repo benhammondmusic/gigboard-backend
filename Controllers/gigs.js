@@ -92,5 +92,5 @@ module.exports = {
   createGig,
   showGig,
   updateGig,
-  destroy,
+  deleteGig,
 };
