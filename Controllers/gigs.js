@@ -1,5 +1,5 @@
 
-const { User, Post } = require('../Models');
+const { Post } = require('../Models');
 
 
 const createGig = async ( req, res ) => {
@@ -24,9 +24,72 @@ const createGig = async ( req, res ) => {
     }
 }
 
+const showGig = async ( req, res ) => {
+
+    try {
+        // im using gigId to find the gig
+        const gig = await Post.findById( req.params.gigId );
+
+        return res.status(200).json({
+            status: 200,
+            gig,
+            requestedAt: new Date().toLocaleString(),
+          }); 
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+const updateGig = async ( req, res ) => {
+    try {
+        // im using gigId to find the gig
+        const updatedGig = await Post.findByIdAndUpdate(
+            req.params.gigId, 
+            {
+                $set: {
+                    ...req.body
+                }
+            },
+            {
+                new: true
+            }
+        );
+
+        return res.status(200).json({
+            status: 200,
+            updatedGig,
+            requestedAt: new Date().toLocaleString(),
+          });
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const destroy = async ( req, res ) => {
+    try {
+        // im using gigId to find the gig
+        const deletedGig = await Post.findByIdAndDelete( req.params.gigId )
+
+        return res.status(200).json({
+            status: 200,
+            deletedGig,
+            requestedAt: new Date().toLocaleString(),
+          });
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 
 
 module.exports = {
     createGig,
+    showGig,
+    updateGig,
+    destroy,
+
 }
