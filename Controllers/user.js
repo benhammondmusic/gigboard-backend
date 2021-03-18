@@ -1,4 +1,4 @@
-const { newUser } = require('../Models/Users/queries');
+// const { newUser } = require('../Models/Users/queries');
 const { User } = require('../Models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -13,15 +13,7 @@ const register = async (req, res) => {
     let { password } = req.body;
     
     console.log(email, 'email just before userExists()');
-
-    /* NOTE in case we want to revise this function in the future */
-    // if (userExists(email)) {
-    //   return res.status(400).json({
-    //     status: 400,
-    //     message: 'User already exists',
-    //   });
-    // }
-
+    
     /* I decided to move what was on queries over here to see what impact it would have */
     const foundUser = await User.findOne({ email })
 
@@ -38,12 +30,12 @@ const register = async (req, res) => {
     password = hash;
 
     const newUserPayload = {
-      username,
       email,
       password,
     };
+    console.log(newUserPayload)
 
-    await newUser(newUserPayload);
+    await User.create(newUserPayload);
 
     return res.status(201).json({
       status: 201,
@@ -61,32 +53,33 @@ const register = async (req, res) => {
 
 /* NOTE Login functionality */
 const login = async (req, res) => {
+
   try {
     const { email, password } = req.body;
 
     /* This will check the user inputs both the email and password fields. If one is not filled then it will throw an error */
-    if (email === '' || password === '') throw 'missingInformation';
+    if (email === '' || password === '') {
+      throw 'missingInformation';
+    }
 
     /* Checking our database for the email entered on login page */
     const foundUser = await User.findOne({ email });
 
     /* Throws error if couldn't find a user */
-    if (!foundUser) throw 'invalidUser';
+    if (!foundUser) {
+      throw 'invalidUser';
+    }
 
     /* Saving into a variable if the password entered is equal to the password of that user */
     const match = await bcrypt.compare(password, foundUser.password);
 
-    /* I'll let you guys see what you think about this, do we want to send a message if the user typed the wrong pssw? */
-
-    // if (!match) throw 'wrongPassword'
-
     if (match) {
       // For now I'm only going to send some json data until we have the JWT set up
       const signedJwt = jwt.sign(
+
         {
-          /* payload */ _id: foundUser._id,
-          firstName: foundUser.firstName,
-          lastName: foundUser.lastName,
+          /* payload */ 
+          _id: foundUser._id,
           email: foundUser.email,
           username: foundUser.username,
         },
@@ -95,8 +88,9 @@ const login = async (req, res) => {
           expiresIn: '24h',
         }
       );
+
       console.log(jwt);
-      res.status(200).json({
+      return res.status(200).json({
         status: 200,
         message: 'Success',
         signedJwt,
