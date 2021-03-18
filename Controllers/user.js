@@ -1,4 +1,4 @@
-const { newUser, userExists } = require('../Models/Users/queries');
+const { newUser } = require('../Models/Users/queries');
 const { User } = require('../Models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -11,13 +11,26 @@ const register = async (req, res) => {
 
     /* We want to isolate the actual password because we are going to salt and hash it */
     let { password } = req.body;
-    /* We could change the display message if there's a user already exists. Let me know what we could do. */
+    
     console.log(email, 'email just before userExists()');
-    if (userExists(email))
+
+    /* NOTE in case we want to revise this function in the future */
+    // if (userExists(email)) {
+    //   return res.status(400).json({
+    //     status: 400,
+    //     message: 'User already exists',
+    //   });
+    // }
+
+    /* I decided to move what was on queries over here to see what impact it would have */
+    const foundUser = await User.findOne({ email })
+
+    if (foundUser) {
       return res.status(400).json({
-        status: 400,
-        message: 'User already exists',
-      });
+          status: 400,
+          message: "Something went wrong! Please try again"
+      })
+    }
 
     const salt = await bcrypt.genSaltSync(10);
     const hash = await bcrypt.hashSync(password, salt);
