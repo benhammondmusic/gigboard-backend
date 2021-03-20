@@ -10,10 +10,10 @@ router.post('/', gigsCtrl.createGig);
 // show all gigs
 router.get('/', gigsCtrl.showGigs);
 // show one gigs
-router.get('/:id', gigsCtrl.showGig);
+router.get('/:gigId', gigsCtrl.showGig);
 // edit gig
-router.put('/:id', gigsCtrl.updateGig);
+router.put('/:gigId', gigsCtrl.updateGig);
 // delete gig
-router.delete('/:id', gigsCtrl.deleteGig);
+router.delete('/:gigId', gigsCtrl.deleteGig);
 
 module.exports = router;

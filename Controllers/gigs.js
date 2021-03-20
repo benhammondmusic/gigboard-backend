@@ -52,6 +52,7 @@ const showGig = async (req, res) => {
 
 const updateGig = async (req, res) => {
   try {
+      console.log(req.body)
     // im using gigId to find the gig
     const updatedGig = await Post.findByIdAndUpdate(
       req.params.gigId,
@@ -71,8 +72,12 @@ const updateGig = async (req, res) => {
       requestedAt: new Date().toLocaleString(),
     });
   } catch (error) {
-    console.log(error);
-  }
+        res.status(500).json({
+            status: 500,
+            message: 'Sorry something went wrong while updating. Internal server Error',
+            requestAt: new Date().toLocaleString()
+        });
+    }
 };
 
 const deleteGig = async (req, res) => {
