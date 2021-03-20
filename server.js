@@ -1,9 +1,14 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 /* External Modules */
 const express = require('express');
 const cors = require('cors');
 
 /* Internal Modules */
 const { user } = require('./Controllers');
+require('./config/database');
+const routes = require('./routes');
 
 /* Port */
 const PORT = process.env.PORT || 5000;
@@ -20,26 +25,18 @@ app.use(cors());
 
 /* Routes */
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.send('Gigboard Backend API');
 });
 
-app.get('/helloworld', (req, res) => {
-  try {
-    res.status(200).json({
-      status: 200,
-      text: `Hello World`,
-      requestedAt: new Date().toLocaleDateString(),
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 500,
-      error,
-      requestedAt: new Date().toLocaleDateString(),
-    });
-  }
-});
+/* 
+// ROUTES
+app.use('/', routes.index); // contains OAUTH routes
+app.use('/users', routes.users); // ALL USER ROUTES
+app.use('/places', routes.places); // ALL PLACE ROUTES, ADD REPORT CARD
+app.use('/reportcards', routes.reportcards); // VIEW ALL, DELETE, EDIT REPORT CARDS */
 
-app.post('/register', user.register);
+// ROUTES
+app.use('/api/gigs', routes.gigs);
 
 // app listening
-app.listen(PORT, () => console.log(`listening at port ${PORT} \nhttp://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`listening at port ${PORT}\n`));
