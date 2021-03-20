@@ -75,26 +75,36 @@ const login = async (req, res) => {
     const match = await bcrypt.compare(password, foundUser.password);
 
     if (match) {
-      // For now I'm only going to send some json data until we have the JWT set up
-      const signedJwt = jwt.sign(
-        {
-          /* payload */
-          _id: foundUser._id,
-          email: foundUser.email,
-        },
-        process.env.SUPER_SECRET_KEY,
-        {
-          expiresIn: "24h",
-        }
-      );
+      console.log(foundUser.password);
 
-      console.log(jwt);
       return res.status(200).json({
         status: 200,
         message: "Success",
-        signedJwt,
+        // signedJwt,
       });
     }
+
+    // if (match) {
+    //   // For now I'm only going to send some json data until we have the JWT set up
+    //   const signedJwt = jwt.sign(
+    //     {
+    //       /* payload */
+    //       _id: foundUser._id,
+    //       email: foundUser.email,
+    //     },
+    //     process.env.SUPER_SECRET_KEY,
+    //     {
+    //       expiresIn: "24h",
+    //     }
+    //   );
+
+    // console.log(jwt);
+    return res.status(200).json({
+      status: 200,
+      message: "Success",
+      signedJwt,
+    });
+    // }
   } catch (error) {
     if (error === "missingInformation") {
       return res.status(400).json({
