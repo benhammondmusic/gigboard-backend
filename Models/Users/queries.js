@@ -1,12 +1,13 @@
-const User = require('../User')
+const User = require('../User');
 const mongoose = require('mongoose');
 
 const newUser = async (body) => {
-
   try {
     console.log(body, 'body inside queries.newUser');
 
-    return await User.create(body);
+    const res = await User.create(body);
+    console.log('response to creating user', res);
+    return res;
   } catch (error) {
     return error;
   }
@@ -19,7 +20,7 @@ const newUser = async (body) => {
 //     const foundUser = await User.findOne({ email });
 //     console.log(foundUser, 'foundUser inside userExists querie');
 //     return foundUser !== null;
-    
+
 //   } catch (error) {
 //     console.log(error, 'inside UserExists');
 //   }
