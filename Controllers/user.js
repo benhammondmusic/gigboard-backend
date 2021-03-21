@@ -13,11 +13,12 @@ const register = async (req, res) => {
     /* We want to isolate the actual password because we are going to salt and hash it */
     let { password } = req.body;
 
-    const foundUser = await User.findOne({ email });
-    console.log(foundUser, 'found user');
+    const foundUserResponse = await User.findOne({ email });
+    console.log(foundUserResponse, 'found user response');
 
-    if (foundUser) {
+    if (foundUserResponse) {
       return res.status(400).json({
+        currentUserId: foundUserResponse._id,
         status: 400,
         message: 'Email address already exists. Please try logging in instead of registering',
       });
