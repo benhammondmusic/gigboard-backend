@@ -35,11 +35,11 @@ const register = async (req, res) => {
     };
     console.log(newUserPayload);
 
-    const dbResponse = await User.create(newUserPayload);
-    console.log('response from User.create()', dbResponse);
+    const createUserResponse = await User.create(newUserPayload);
+    console.log('response from User.create()', createUserResponse);
 
     res.status(201).json({
-      currentUserId: dbResponse._id,
+      currentUserId: createUserResponse._id,
       status: 201,
       message: 'User created successfully',
       requestedAt: new Date().toLocaleDateString(),
@@ -65,10 +65,10 @@ const login = async (req, res) => {
     }
 
     /* Checking our database for the email entered on login page */
-    const foundUser = await User.findOne({ email });
+    const foundUserResponse = await User.findOne({ email });
 
     /* Throws error if couldn't find a user */
-    if (!foundUser) {
+    if (!foundUserResponse) {
       throw 'invalidUser';
     }
 
@@ -79,6 +79,7 @@ const login = async (req, res) => {
       console.log(foundUser.password);
 
       return res.status(200).json({
+        currentUserId: foundUserResponse._id,
         status: 200,
         message: 'Success',
         // signedJwt,
