@@ -63,7 +63,11 @@ const registerGoogleUser = async (req, res) => {
     console.log(foundUserResponse, "found user response");
 
     if (foundUserResponse) {
-      return "user exists";
+      return res.status(200).json({
+        currentUserId: foundUserResponse._id,
+        status: 200,
+        message: "Found a user",
+      });
     }
 
     const createUserResponse = await User.create({ email });
