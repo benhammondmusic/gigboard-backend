@@ -54,7 +54,7 @@ const register = async (req, res) => {
 
 /* NOTE Google Register */
 
-const registerGoogleUser = async () => {
+const registerGoogleUser = async (req, res) => {
   console.log(req.body, "req.body inside google register");
   try {
     const { email } = req.body;
