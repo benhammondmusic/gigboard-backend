@@ -1,27 +1,25 @@
 // const { newUser } = require('../Models/Users/queries');
-const { User } = require("../Models");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
+const { User } = require('../Models');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 /* NOTE Register functionality */
 const register = async (req, res) => {
-  console.log(req.body, "req.body inside user register");
+  console.log(req.body, 'req.body inside user register');
   try {
     const { email } = req.body;
 
     /* We want to isolate the actual password because we are going to salt and hash it */
     let { password } = req.body;
 
-    console.log(email, "email just before userExists()");
+    const foundUserResponse = await User.findOne({ email });
+    console.log(foundUserResponse, 'found user response');
 
-    /* I decided to move what was on queries over here to see what impact it would have */
-    const foundUser = await User.findOne({ email });
-
-    if (foundUser) {
+    if (foundUserResponse) {
       return res.status(400).json({
         status: 400,
-        message: "Something went wrong! Please try again",
+        message: 'Email address already exists. Please try logging in instead of registering',
       });
     }
 
@@ -36,50 +34,52 @@ const register = async (req, res) => {
     };
     console.log(newUserPayload);
 
-    await User.create(newUserPayload);
+    const createUserResponse = await User.create(newUserPayload);
+    console.log('response from User.create()', createUserResponse);
 
     res.status(201).json({
+      currentUserId: createUserResponse._id,
       status: 201,
-      message: "User created succesfully",
+      message: 'User created successfully',
       requestedAt: new Date().toLocaleDateString(),
     });
   } catch (error) {
-    console.log(error);
+    console.log(error, 'ERROR REGISTERING USER');
     return res.status(400).json({
       status: 400,
-      message: "Something went wrong! Please try again ya fool",
+      message: 'Something went wrong! Please try again ya fool',
     });
   }
 };
 
 /* NOTE Login functionality */
 const login = async (req, res) => {
-  console.log(req.body, "req.body inside user.login()");
+  console.log(req.body, 'req.body inside user.login()');
   try {
     const { email, password } = req.body;
 
     /* This will check the user inputs both the email and password fields. If one is not filled then it will throw an error */
-    if (email === "" || password === "") {
-      throw "missingInformation";
+    if (email === '' || password === '') {
+      console.log('Missing email and/or password');
+      throw 'missingInformation';
     }
 
     /* Checking our database for the email entered on login page */
-    const foundUser = await User.findOne({ email });
+    const foundUserResponse = await User.findOne({ email });
 
     /* Throws error if couldn't find a user */
-    if (!foundUser) {
-      throw "invalidUser";
-    }
+    if (!foundUserResponse) throw 'invalidUser';
 
     /* Saving into a variable if the password entered is equal to the password of that user */
-    const match = await bcrypt.compare(password, foundUser.password);
+    const match = await bcrypt.compare(password, foundUserResponse.password);
 
     if (match) {
-      console.log(foundUser.password);
+      console.log(foundUserResponse.password, 'found user password');
 
       return res.status(200).json({
+        currentUserId: foundUserResponse._id,
         status: 200,
-        message: "Success",
+        message: 'Success',
         // signedJwt,
       });
     }
@@ -99,30 +99,31 @@ const login = async (req, res) => {
     //   );
 
     // console.log(jwt);
-    return res.status(200).json({
-      status: 200,
-      message: "Success",
-      signedJwt,
-    });
-    // }
+    // return res.status(200).json({
+    //   currentUserId: foundUserResponse._id,
+    //   status: 200,
+    //   message: 'Success',
+    // signedJwt,
+    // });
   } catch (error) {
-    if (error === "missingInformation") {
+    console.log(error, 'ERROR IN USER CTRL LOGIN()');
+    if (error === 'missingInformation') {
       return res.status(400).json({
         status: 400,
-        message: "Email and password cannot be empty",
+        message: 'Email and password cannot be empty',
       });
     }
-    if (error === "invalidUser") {
+    if (error === 'invalidUser') {
       return res.status(400).json({
         status: 400,
         message: "User doesn't exist",
       });
     }
 
-    // return res.status(500).json({
-    //   status: 500,
-    //   message: 'Something went wrong. Please try again',
-    // });
+    return res.status(500).json({
+      status: 500,
+      message: 'Something went wrong. Please try again',
+    });
   }
 };
 
