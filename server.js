@@ -24,6 +24,9 @@ app.use(cors());
 /* Routes */
 app.use('/api/gigs', routes.gigs); // ALL GIG ROUTES: CRUD
 app.use('/users', routes.users); // ALL USER ROUTES: login(), register()
+app.use('/', (req, res) => {
+  res.send('Gigboard Backend Working');
+});
 
 // app listening
 app.listen(PORT, () => console.log(`listening at port ${PORT}\n`));
