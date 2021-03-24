@@ -1,13 +1,13 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-console.log('database.js')
+console.log('database.js');
 // CONNECT TO REMOTE MONGODB ATLAS
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
-  useFindAndModify: false
+  useFindAndModify: false,
 });
 
 // shortcut to mongoose.connection object
