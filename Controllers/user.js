@@ -90,7 +90,7 @@ const registerGoogleUser = async (req, res) => {
 
 /* NOTE Login functionality */
 const login = async (req, res) => {
-  console.log(req.body, "req.body inside user.login()");
+  // console.log(req.body, "req.body inside user.login()");
   try {
     const { email, password } = req.body;
 
