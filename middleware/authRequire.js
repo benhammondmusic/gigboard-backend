@@ -4,6 +4,8 @@ const authRequired = (req, res, next) => {
   try {
     const bearerHeader = req.headers["authorization"];
 
+    console.log(req.headers["authorization"], "req.headers['authorization'] in the middleware function");
+
     if (typeof bearerHeader === "undefined") throw "forbidden";
 
     const token = bearerHeader.split(" ")[1];

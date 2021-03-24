@@ -9,7 +9,7 @@ const gigsCtrl = require("../Controllers/gigs");
 // make a new gig
 router.post("/", gigsCtrl.createGig);
 // show all gigs
-router.get("/", gigsCtrl.showGigs);
+router.get("/", authRequired, gigsCtrl.showGigs);
 // show one gigs
 router.get("/:gigId", gigsCtrl.showGig);
 // edit gig
