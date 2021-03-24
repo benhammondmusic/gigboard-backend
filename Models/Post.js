@@ -24,6 +24,10 @@ const postSchema = new Schema({
   urgency: {
     type: String,
   },
+  pay: {
+    type: Number,
+    min: 0,
+  },
   tags: [
     {
       type: String,
