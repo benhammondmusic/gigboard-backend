@@ -2,7 +2,7 @@ const { Post } = require('../Models');
 
 const createGig = async (req, res) => {
   try {
-    console.log(req.body, 'REQ.BODY in CREATEGIG()');
+    console.log(req.body, 'REQ.BODY in createGig()');
 
     const foundGig = await Post.findOne(req.body);
 
@@ -16,7 +16,7 @@ const createGig = async (req, res) => {
       requestAt: new Date().toLocaleString(),
     });
   } catch (error) {
-    console.log(error, 'ERROR IN CREATEGIG()');
+    console.log(error, 'ERROR IN createGig()');
   }
 };
 const showGigs = async (req, res) => {
@@ -31,7 +31,7 @@ const showGigs = async (req, res) => {
       requestedAt: new Date().toLocaleString(),
     });
   } catch (error) {
-    console.log(error, 'ERROR IN SHOWGIGS()');
+    console.log(error, 'ERROR IN showGigs()');
   }
 };
 
@@ -52,7 +52,7 @@ const showGig = async (req, res) => {
 
 const updateGig = async (req, res) => {
   try {
-      console.log(req.body)
+    console.log(req.body);
     // im using gigId to find the gig
     const updatedGig = await Post.findByIdAndUpdate(
       req.params.gigId,
@@ -72,12 +72,12 @@ const updateGig = async (req, res) => {
       requestedAt: new Date().toLocaleString(),
     });
   } catch (error) {
-        res.status(500).json({
-            status: 500,
-            message: 'Sorry something went wrong while updating. Internal server Error',
-            requestAt: new Date().toLocaleString()
-        });
-    }
+    res.status(500).json({
+      status: 500,
+      message: 'Sorry something went wrong while updating. Internal server Error',
+      requestAt: new Date().toLocaleString(),
+    });
+  }
 };
 
 const deleteGig = async (req, res) => {

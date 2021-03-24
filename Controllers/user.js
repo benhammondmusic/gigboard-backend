@@ -52,6 +52,42 @@ const register = async (req, res) => {
   }
 };
 
+/* NOTE Google Register */
+
+const registerGoogleUser = async (req, res) => {
+  console.log(req.body, 'req.body inside google register');
+  try {
+    const { email } = req.body;
+
+    const foundUserResponse = await User.findOne({ email });
+    console.log(foundUserResponse, 'found user response');
+
+    if (foundUserResponse) {
+      return res.status(200).json({
+        currentUserId: foundUserResponse._id,
+        status: 200,
+        message: 'Found a user',
+      });
+    }
+
+    const createUserResponse = await User.create({ email });
+    console.log('response from User.create() VIA GOOGLE OAUTH', createUserResponse);
+
+    res.status(201).json({
+      currentUserId: createUserResponse._id,
+      status: 201,
+      message: 'User created successfully',
+      requestedAt: new Date().toLocaleDateString(),
+    });
+  } catch (error) {
+    console.log(error, 'ERROR REGISTERING USER VIA GOOGLE OAUTH');
+    return res.status(400).json({
+      status: 400,
+      message: 'Something went wrong! Please try again ya fool',
+    });
+  }
+};
+
 /* NOTE Login functionality */
 const login = async (req, res) => {
   console.log(req.body, 'req.body inside user.login()');
@@ -130,4 +166,5 @@ const login = async (req, res) => {
 module.exports = {
   register,
   login,
+  registerGoogleUser,
 };
