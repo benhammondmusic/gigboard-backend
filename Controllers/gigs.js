@@ -1,12 +1,12 @@
-const { Post } = require('../Models');
+const { Post } = require("../Models");
 
 const createGig = async (req, res) => {
   try {
-    console.log(req.body, 'REQ.BODY in createGig()');
+    console.log(req.body, "REQ.BODY in createGig()");
 
     const foundGig = await Post.findOne(req.body);
 
-    if (foundGig) throw 'gig is already created!';
+    if (foundGig) throw "gig is already created!";
 
     const gig = await Post.create(req.body);
 
@@ -16,12 +16,12 @@ const createGig = async (req, res) => {
       requestAt: new Date().toLocaleString(),
     });
   } catch (error) {
-    console.log(error, 'ERROR IN createGig()');
+    console.log(error, "ERROR IN createGig()");
   }
 };
 const showGigs = async (req, res) => {
   try {
-    console.log('show all gigs');
+    console.log("show all gigs");
     // im using gigId to find the gig
     const foundGigs = await Post.find({});
 
@@ -31,7 +31,7 @@ const showGigs = async (req, res) => {
       requestedAt: new Date().toLocaleString(),
     });
   } catch (error) {
-    console.log(error, 'ERROR IN showGigs()');
+    console.log(error, "ERROR IN showGigs()");
   }
 };
 
@@ -74,7 +74,7 @@ const updateGig = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       status: 500,
-      message: 'Sorry something went wrong while updating. Internal server Error',
+      message: "Sorry something went wrong while updating. Internal server Error",
       requestAt: new Date().toLocaleString(),
     });
   }
