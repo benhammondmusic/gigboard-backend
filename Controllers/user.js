@@ -1,4 +1,5 @@
 // const { newUser } = require('../Models/Users/queries');
+require("dotenv").config();
 const { User } = require("../Models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -63,8 +64,16 @@ const registerGoogleUser = async (req, res) => {
     console.log(foundUserResponse, "found user response");
 
     if (foundUserResponse) {
+      const userId = foundUserResponse._id;
+      const token = jwt.sign({ userId }, process.env.SUPER_SECRET_KEY, {
+        expiresIn: "24h",
+      });
+
       return res.status(200).json({
+        auth: true,
         currentUserId: foundUserResponse._id,
+        email: foundUserResponse.email,
+        token,
         status: 200,
         message: "Found a user",
       });
@@ -73,9 +82,18 @@ const registerGoogleUser = async (req, res) => {
     const createUserResponse = await User.create({ email });
     console.log("response from User.create() VIA GOOGLE OAUTH", createUserResponse);
 
+    const userCreatedId = createUserResponse._id;
+
+    const token = jwt.sign({ userCreatedId }, process.env.SUPER_SECRET_KEY, {
+      expiresIn: "24h",
+    });
+
     res.status(201).json({
+      auth: true,
       currentUserId: createUserResponse._id,
+      email: createUserResponse.email,
       status: 201,
+      token,
       message: "User created successfully",
       requestedAt: new Date().toLocaleDateString(),
     });

@@ -1,14 +1,15 @@
-const jwt = require("jsonwebtoken");
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 const authRequired = (req, res, next) => {
   try {
-    const bearerHeader = req.headers["authorization"];
+    const bearerHeader = req.headers['authorization'];
 
-    console.log(req.headers["authorization"], "req.headers['authorization'] in the middleware function");
+    console.log(req.headers['authorization'], "req.headers['authorization'] in the middleware function");
 
-    if (typeof bearerHeader === "undefined") throw "forbidden";
+    if (typeof bearerHeader === 'undefined') throw 'forbidden';
 
-    const token = bearerHeader.split(" ")[1];
+    const token = bearerHeader.split(' ')[1];
 
     let payload = jwt.verify(token, process.env.SUPER_SECRET_KEY);
 
@@ -16,10 +17,10 @@ const authRequired = (req, res, next) => {
 
     next();
   } catch (error) {
-    if (error === "forbidden") {
+    if (error === 'forbidden') {
       res.status(403).json({
         status: 403,
-        message: "forbidden",
+        message: 'forbidden',
       });
     } else {
       res.status(401).json({
